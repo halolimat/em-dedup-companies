@@ -1,3 +1,5 @@
+#! python3
+
 import numpy as np
 import os
 import csv
@@ -51,8 +53,8 @@ def read_data(file_name, use_lower=True):
 
             # TODO: may need to swap in a more sophisticated tokenizer here
             words = line.split(' ')
-            data.append(words)
 
+            data.append(words)
             # build a unique identifier so we can debug if necessary
             uid = unique_company_name(line, i)
             UNIQUE_NAMES.append(uid)
@@ -80,7 +82,8 @@ def initialize_z(data):
     return z
 
 
-def initialize_probabilities(word_freq):
+def init_probabilities(word_freq):
+
     """
     Initialize the core and background probabilities over the vocabulary to be the uniform distribution
     :param word_freq:
@@ -473,7 +476,6 @@ def run_examples(prob_core, prob_back):
     for w in ['starbucks', 'peets', 'coffee', 'company', 'incorporated', 'inc', 'corporation', 'llc']:
         print('{:20}\t{:.4}\t{:.4}'.format(w, prob_core[w], prob_back[w]))
 
-
 if __name__ == '__main__':
     in_file = 'company_small.csv'
     # in_file = 'company_names.csv'
@@ -483,14 +485,21 @@ if __name__ == '__main__':
     data, vocabulary = read_data(in_file)
     z = initialize_z(data)
 
-    print('Read {} companies...'.format(len(data)))
-    prob_core, prob_back = load_probabilities()
+    #print('Read {} companies...'.format(len(data)))
+    #prob_core, prob_back = load_probabilities()
+    prob_core = None
+    prob_back = None
     # if core.pickle and back.picles files already exist, do not retrain
     # prob_core = None
     # prob_back = None
 
+    """print (vocabulary)
+    print (vocabulary["gpo"])
+    exit()"""
+
     if not prob_core or not prob_back:
-        prob_core, prob_back = initialize_probabilities(vocabulary)
+
+        prob_core, prob_back = init_probabilities(vocabulary)
 
         print('Initializing EM...')
         prob_core, prob_back = expectation_maximization(data, vocabulary, prob_core, prob_back, z, max_iters=20)
@@ -499,6 +508,8 @@ if __name__ == '__main__':
     with open('probs.csv', 'w') as fout:
         fout.write('word, core, background\n')
         for w in vocabulary.keys():
+            prob_core[w]
+            prob_back[w]
             fout.write('{:20}, {:.5}, {:.5}\n'.format(w, prob_core[w], prob_back[w]))
 
     run_examples(prob_core, prob_back)
