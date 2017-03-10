@@ -476,6 +476,17 @@ def run_examples(prob_core, prob_back):
     for w in ['starbucks', 'peets', 'coffee', 'company', 'incorporated', 'inc', 'corporation', 'llc']:
         print('{:20}\t{:.4}\t{:.4}'.format(w, prob_core[w], prob_back[w]))
 
+def run_test(data, prob_core, prob_back):
+
+    for x in data:
+        for y in x:
+            if prob_core[y] > prob_back[y]:
+                print (y, 1)
+            else:
+                print (y, 0)
+
+        exit()
+
 if __name__ == '__main__':
     in_file = 'company_small.csv'
     # in_file = 'company_names.csv'
@@ -486,9 +497,8 @@ if __name__ == '__main__':
     z = initialize_z(data)
 
     #print('Read {} companies...'.format(len(data)))
-    #prob_core, prob_back = load_probabilities()
-    prob_core = None
-    prob_back = None
+    prob_core, prob_back = load_probabilities()
+
     # if core.pickle and back.picles files already exist, do not retrain
     # prob_core = None
     # prob_back = None
@@ -512,4 +522,4 @@ if __name__ == '__main__':
             prob_back[w]
             fout.write('{:20}, {:.5}, {:.5}\n'.format(w, prob_core[w], prob_back[w]))
 
-    run_examples(prob_core, prob_back)
+    run_test(data, prob_core, prob_back)
