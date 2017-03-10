@@ -477,6 +477,8 @@ def run_examples(prob_core, prob_back):
 if __name__ == '__main__':
     in_file = 'company_small.csv'
     # in_file = 'company_names.csv'
+    in_file = "starbucks_test.csv"
+    in_file = "chennai.csv"
 
     data, vocabulary = read_data(in_file)
     z = initialize_z(data)
@@ -500,4 +502,3 @@ if __name__ == '__main__':
             fout.write('{:20}, {:.5}, {:.5}\n'.format(w, prob_core[w], prob_back[w]))
 
     run_examples(prob_core, prob_back)
-
