@@ -9,6 +9,7 @@ import affinegap
 from functools import lru_cache
 from collections import defaultdict
 import copy
+from tabulate import tabulate
 
 
 #
@@ -478,14 +479,24 @@ def run_examples(prob_core, prob_back):
 
 def run_test(data, prob_core, prob_back):
 
+    header = ["Original LN", "Augmented LN"]
+
+    rows = list()
+
     for x in data:
+        core = list()
+
         for y in x:
             if prob_core[y] > prob_back[y]:
-                print (y, 1)
-            else:
-                print (y, 0)
+                core.append(y)
 
-        exit()
+        rows.append([" ".join(x), " ".join(core)])
+
+    f = open('output.txt', 'w')
+    f.write(tabulate(rows, headers=header, tablefmt="grid"))
+    f.close()
+
+
 
 if __name__ == '__main__':
     in_file = 'company_small.csv'
